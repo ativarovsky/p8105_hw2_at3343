@@ -18,3 +18,13 @@ mr_trash_data = janitor::clean_names(mr_trash_data)
 ```
 
 The "raw" dataframe contains 336 entries and 15 columns. Now we want to remove the last column, which contains notes, and remove any rows that have dumpster = NA. 
+
+```{r}
+# Removing last column of comments
+mr_trash_data = select(mr_trash_data, -x15)
+
+# Removing rows with "NA" for dumpster
+mr_trash_data = drop_na(mr_trash_data, dumpster)
+
+```
+
