@@ -4,17 +4,17 @@ author: "Alice Tivarovsky"
 date: "9/26/2019"
 output: github_document
 ---
-#Problem 1
+# Problem 1
 
-We are reading in and tidying the Mr. Trash Wheel dataset, an excel file. 
-```{r setup, include=FALSE}
+We are reading in the Mr. Trash Wheel dataset, stored as an excel file. 
+```{r}
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
 library(readxl)
 
-mr_trash_data = read_excel("../data/mr_trash_dataset.xlsx",2)
+mr_trash_data = read_excel("../data/mr_trash_dataset.xlsx")
 mr_trash_data = janitor::clean_names(mr_trash_data)
-
 ```
 
+The "raw" dataframe contains 336 entries and 15 columns. Now we want to remove the last column, which contains notes, and remove any rows that have dumpster = NA. 
