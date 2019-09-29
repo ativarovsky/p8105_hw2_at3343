@@ -57,6 +57,10 @@ precip_data_17 = drop_na(precip_data_17, precipitation_in)
 precip_data_18 = drop_na(precip_data_18, precipitation_in)
 precip_data_18 = drop_na(precip_data_18, x2)
 
+# Removing top row 
+precip_data_17 = filter(precip_data_17, precipitation_in != "Month")
+precip_data_18 = filter(precip_data_18, precipitation_in != "Month")
+
 # Renaming precipitation columns with year
 precip_data_17 = rename(precip_data_17, precip_2017 = x2)
 precip_data_18 = rename(precip_data_18, precip_2018 = x2)
@@ -68,6 +72,21 @@ Next, we will combine the precipitation data for 2017 and 2018 using a left-join
 
 precip_data =  left_join(precip_data_17, precip_data_18, by = "precipitation_in")
 
-precip_data
+
 ```
+
+
+
+# Problem 2
+```{r}
+pols_month = 
+  read_csv(file = "../data/pols-month.csv") %>% 
+  janitor::clean_names() %>% 
+ separate(mon, c("year", "month", "day"), "-")
+
+  
+
+
+
+``` 
 
