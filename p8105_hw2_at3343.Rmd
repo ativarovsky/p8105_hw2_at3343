@@ -70,14 +70,22 @@ Next, we will combine the precipitation data for 2017 and 2018 using a left-join
 
 ```{r data_frame5}
 
-precip_data =  left_join(precip_data_17, precip_data_18, by = "precipitation_in")
+precip_data =  
+  left_join(precip_data_17, precip_data_18, by = "precipitation_in")
 
-
+# FIGURE OUT WHY PIPE DOESNT WORK HERE
+precip_data =
+  mutate(precip_data, precipitation_in = as.numeric(precipitation_in),
+         precipitation_in = month.name[precipitation_in]) %>% 
+  rename(month = precipitation_in)
+    
 ```
 
 
 
 # Problem 2
+
+# Pols Data
 ```{r}
 pols_month = 
   read_csv(file = "../data/pols-month.csv") %>% 
