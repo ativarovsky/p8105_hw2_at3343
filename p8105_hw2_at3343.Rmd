@@ -6,8 +6,8 @@ output: github_document
 ---
 # Problem 1
 
-We are reading in the Mr. Trash Wheel dataset, stored as an excel file. 
-```{r}
+We are reading in the Mr. Trash Wheel dataset, stored as an excel file. We will also remove the last column, which contains notes. 
+```{r data_frame1}
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
@@ -15,16 +15,22 @@ library(readxl)
 
 mr_trash_data = read_excel("../data/mr_trash_dataset.xlsx")
 mr_trash_data = janitor::clean_names(mr_trash_data)
-```
 
-The "raw" dataframe contains 336 entries and 15 columns. Now we want to remove the last column, which contains notes, and remove any rows that have dumpster = NA. 
-
-```{r}
 # Removing last column of comments
 mr_trash_data = select(mr_trash_data, -x15)
+```
+
+The "raw" dataframe contains 336 entries and 15 columns. 
+
+We will now remove any rows that have dumpster = NA and convert the column "sports_balls" to an integer vector rounded to the nearest whole number. 
+
+```{r data_frame2}
 
 # Removing rows with "NA" for dumpster
 mr_trash_data = drop_na(mr_trash_data, dumpster)
+
+# Rounding sports_balls to nearest integer
+mr_trash_data = mutate(mr_trash_data, sports_balls = round(as.integer(sports_balls, digits = 0)))
 
 ```
 
