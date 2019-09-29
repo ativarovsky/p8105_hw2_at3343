@@ -39,7 +39,7 @@ mr_trash_data = mutate(mr_trash_data, sports_balls = round(as.integer(sports_bal
 
 ## Precipitatin Data
 
-We will now import and clean 2017 and 2018 precipitation data from the Mr. Trash dataset. 
+We will now import and clean 2017 and 2018 precipitation data from the Mr. Trash Wheel excel file.  
 
 ```{r data_frame3}
 # Importing 2017 and 2018 precipitation data
@@ -56,5 +56,18 @@ We note that the 2017 dataset is complete, but the 2018 dataset is missing value
 precip_data_17 = drop_na(precip_data_17, precipitation_in)
 precip_data_18 = drop_na(precip_data_18, precipitation_in)
 precip_data_18 = drop_na(precip_data_18, x2)
+
+# Renaming precipitation columns with year
+precip_data_17 = rename(precip_data_17, precip_2017 = x2)
+precip_data_18 = rename(precip_data_18, precip_2018 = x2)
+```
+
+Next, we will combine the precipitation data for 2017 and 2018 using a left-join, since 2017 contains more data than 2018. 
+
+```{r data_frame5}
+
+precip_data =  left_join(precip_data_17, precip_data_18, by = "precipitation_in")
+
+precip_data
 ```
 
