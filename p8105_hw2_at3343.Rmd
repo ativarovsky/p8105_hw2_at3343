@@ -94,6 +94,11 @@ pols_month =
   janitor::clean_names() %>% 
   separate(mon, c("year", "month", "day"), "-") %>% 
   mutate(month = as.numeric(month),
-         month = month.name[month])
+         month = month.name[month]) %>% 
+  # FIX THE PRESIDENT LOGICAL OPERATOR
+  mutate(president = prez_dem == 1) %>% 
+  select(-prez_dem, -prez_gop, -day)
+
+pols_month
 ``` 
 
