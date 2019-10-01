@@ -113,9 +113,11 @@ snp_data =
   janitor::clean_names()  %>% 
   separate(date, c("month", "day", "year"), "/") %>% 
   select(year, month, day, everything()) %>% 
-  #NOT WORKING
-  arrange(year, month, day)
+  mutate(month = as.integer(month)) %>% 
+  arrange(year, month)
 
 snp_data
 ```
+
+
 
