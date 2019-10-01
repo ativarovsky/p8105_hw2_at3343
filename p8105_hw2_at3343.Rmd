@@ -88,6 +88,9 @@ precip_data =
 # Problem 2
 
 # Pols Data
+
+First, we read and clean the pols-month dataset. 
+
 ```{r}
 pols_month = 
   read_csv(file = "../data/pols-month.csv") %>% 
@@ -101,4 +104,18 @@ pols_month =
 
 pols_month
 ``` 
+
+Next, we read and clean the snp dataset. 
+
+```{r}
+snp_data = 
+  read_csv(file = "../data/snp.csv") %>% 
+  janitor::clean_names()  %>% 
+  separate(date, c("month", "day", "year"), "/") %>% 
+  select(year, month, day, everything()) %>% 
+  #NOT WORKING
+  arrange(year, month, day)
+
+snp_data
+```
 
