@@ -144,11 +144,12 @@ Finally, we combine the three datasets....
 Reading and tidying baby names dataset. 
 
 ```{r}
-unemp_data = 
+pop_names = 
   read_csv(file = "../data/Popular_Baby_Names.csv") %>% 
-  janitor::clean_names()
-
-unemp_data
+  janitor::clean_names() %>% 
+  mutate(gender,  "ASIAN AND PACIFIC ISLANDER" = "ASIAN AND PACI", "BLACK NON HISPANIC" = "BLACK NON HISP", "WHITE NON HISPANIC" = "WHITE NON HISP") %>% 
+  mutate(childs_first_name = toupper(childs_first_name))
+pop_names
 ```
 
 
