@@ -119,5 +119,19 @@ snp_data =
 snp_data
 ```
 
+Next, we read and clean the unemployment dataset. This entails switching from wide format to long format. 
+
+```{r}
+unemp_data = 
+  read_csv(file = "../data/unemployment.csv") %>% 
+  janitor::clean_names() %>%   
+  pivot_longer(jan:dec, 
+             names_to = "month",
+            values_to = "unemployment")
+
+unemp_data
+  
+```
+
 
 
