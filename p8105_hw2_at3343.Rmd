@@ -114,12 +114,13 @@ snp_data =
   separate(date, c("month", "day", "year"), "/") %>% 
   select(year, month, day, everything()) %>% 
   mutate(month = as.integer(month)) %>% 
+  mutate(month = month.name[month]) %>% 
   arrange(year, month)
 
 snp_data
 ```
 
-Next, we read and clean the unemployment dataset. This entails switching from wide format to long format. 
+Next, we read and clean the unemployment dataset. This entails switching the format from wide to long 
 
 ```{r}
 unemp_data = 
@@ -127,11 +128,27 @@ unemp_data =
   janitor::clean_names() %>%   
   pivot_longer(jan:dec, 
              names_to = "month",
-            values_to = "unemployment")
+             values_to = "unemployment") %>% 
+  # NOT WORKING
+  mutate(month = as.numeric(month), month = month.name[month]) 
 
 unemp_data
-  
 ```
 
+Finally, we combine the three datasets....
+
+
+
+# Problem 3
+
+Reading and tidying baby names dataset. 
+
+```{r}
+unemp_data = 
+  read_csv(file = "../data/Popular_Baby_Names.csv") %>% 
+  janitor::clean_names()
+
+unemp_data
+```
 
 
