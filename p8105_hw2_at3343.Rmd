@@ -176,11 +176,25 @@ select(ethnicity, year_of_birth, rank) %>%
 
 olivia_pop
 ```
+Creating a table for olivia_pop rank over time. 
 
 ```{r}
 library(knitr)
-kable(pop_names)
+olivia_pop = rename(olivia_pop, "Ethnicity" = "ethnicity")
+kable(olivia_pop)
 ```
 
-# knitr::kable ()
+Now we create a table for the most popular boys' name over time. First we use "arrange" to figure out the name, then we follow the same process as the Olivia table. 
+
+```{r}
+boys_name = 
+  filter(pop_names, gender == "MALE") %>% 
+  select(-gender) %>% 
+  arrange(desc(year_of_birth), ethnicity, desc(count))
+  
+boys_name
+```
+
+Finally, we create a scatterplot of male, white non-hispanic children born in 2016, plot showing the number of children with a name (y axis) against the rank in popularity of that name (x axis).
+
 
