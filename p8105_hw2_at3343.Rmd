@@ -184,15 +184,17 @@ olivia_pop = rename(olivia_pop, "Ethnicity" = "ethnicity")
 kable(olivia_pop)
 ```
 
-Now we create a table for the most popular boys' name over time. First we use "arrange" to figure out the name, then we follow the same process as the Olivia table. 
+Now we create a table for the most popular boys' name over time and make a table using kable() as above. 
 
 ```{r}
 boys_name = 
-  filter(pop_names, gender == "MALE") %>% 
-  select(-gender) %>% 
-  arrange(desc(year_of_birth), ethnicity, desc(count))
-  
+  filter(pop_names, gender == "MALE", rank == 1) %>% 
+  select(ethnicity, year_of_birth, childs_first_name) %>% 
+  rename("Ethnicity" = "ethnicity") %>% 
+  pivot_wider(names_from = "year_of_birth",values_from = "childs_first_name")
 boys_name
+
+kable(boys_name)
 ```
 
 Finally, we create a scatterplot of male, white non-hispanic children born in 2016, plot showing the number of children with a name (y axis) against the rank in popularity of that name (x axis).
