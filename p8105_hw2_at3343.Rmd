@@ -199,4 +199,15 @@ kable(boys_name)
 
 Finally, we create a scatterplot of male, white non-hispanic children born in 2016, plot showing the number of children with a name (y axis) against the rank in popularity of that name (x axis).
 
+```{r}
+white_boys_2016 = 
+  filter(pop_names, gender == "MALE", year_of_birth == 2016, ethnicity == "WHITE NON HISPANIC")
+
+white_boys_2016
+
+plot_1 = ggplot(white_boys_2016, aes(x = rank, y = childs_first_name)) + geom_point()
+plot_1
+```
+
+
 
