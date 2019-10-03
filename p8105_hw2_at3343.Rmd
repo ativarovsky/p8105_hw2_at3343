@@ -205,7 +205,7 @@ white_boys_2016 =
 
 white_boys_2016
 
-plot_1 = ggplot(white_boys_2016, aes(x = rank, y = childs_first_name)) + geom_point()
+plot_1 = ggplot(white_boys_2016, aes(x = rank, y = count)) + geom_point()
 plot_1
 ```
 
