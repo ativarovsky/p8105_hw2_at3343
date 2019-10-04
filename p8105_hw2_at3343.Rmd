@@ -110,24 +110,23 @@ The Mr.Trash Wheel dataset catalogs the weight, volume and categories of trash p
 
 First, we read and clean the pols-month dataset. 
 
-```{r}
+```{r data_frame6}
 pols_month = 
   read_csv(file = "../data/pols-month.csv") %>% 
   janitor::clean_names() %>% 
   separate(mon, c("year", "month", "day"), "-") %>% 
   mutate(month = as.numeric(month),
          month = month.abb[month]) %>% 
-  # FIX THE PRESIDENT LOGICAL OPERATOR
   mutate(democrat_president = prez_dem == 1) %>% 
   select(-prez_dem, -prez_gop, -day) 
 
 pols_month
 ``` 
-Pols_month contains 822 roww and 9 columns. 
+Pols_month contains 822 rows and 9 columns. 
 
 Next, we read and clean the snp dataset. 
 
-```{r}
+```{r data_frame7}
 snp_data = 
   read_csv(file = "../data/snp.csv") %>% 
   janitor::clean_names()  %>% 
@@ -143,7 +142,7 @@ The snp_data dataset contains 787 rows.
 
 Next, we read and clean the unemployment dataset. This entails switching the format from wide to long 
 
-```{r}
+```{r data_frame8}
 unemp_data = 
   read_csv(file = "../data/unemployment.csv") %>% 
   pivot_longer(Jan:Dec, 
@@ -154,23 +153,29 @@ unemp_data =
 
 unemp_data
 ```
-The unemp_data dataset contains 816. 
+The unemp_data dataset contains 816 observations. 
 
 Finally, we combine the three datasets, starting by combining pols and snp, then joining the combined dataset with the unemployment dataset. 
 
-822, 787
-```{r}
+```{r data_frame9}
 pols_snp = 
-  left_join(pols_month, snp_data, by = c("year", "month"))
+  right_join(pols_month, snp_data, by = c("year", "month")) %>% 
+  left_join(unemp_data, by = c("year", "month"))
+
 pols_snp
 ```
 
+## Conclusion
+
+The pols_month dataset contains 822 observations and 9 variables. It catalogs congressional representation by party, including senators, representatives, governors, and the president. The snp_data dataset contains 787 rows and provids the closing value of the S&P 500 on the specified date. The unemployment dataset provides the percentage unemployed by year and month and contains 816 observations and 3 variables. 
+
+The dataset obtained after merging the three dataset contains 15 variables and 787 rows spanning 1950 - 2015. We noted that there was no data for S&P 500 from January 1947 through December 1949, most likely because the index did not exist (although, per Wikipedia, the S&P index did not exist until 1957...) and used a right_join for this reason. The key variables are the logical variable indicating whether the president was a democrat or republican, unemployment percentage, and S&P500 closing value. 
 
 # Problem 3
 
 Reading and tidying baby names dataset. 
 
-```{r}
+```{r data_frame10}
 pop_names = 
   read_csv(file = "../data/Popular_Baby_Names.csv") %>% 
   janitor::clean_names() %>% 
@@ -184,7 +189,7 @@ pop_names
 
 Now we are making a table showing the rank in popularity of the name “Olivia” as a female baby name over time. First we create a dataset from pop_names with only the information we need. 
 
-```{r}
+```{r data_frame11}
 olivia_pop = filter(pop_names, childs_first_name == "OLIVIA") %>% 
 select(ethnicity, year_of_birth, rank) %>% 
   pivot_wider(names_from = "year_of_birth",values_from = "rank")
@@ -193,7 +198,7 @@ olivia_pop
 ```
 Creating a table for olivia_pop rank over time. 
 
-```{r}
+```{r data_frame12}
 library(knitr)
 olivia_pop = rename(olivia_pop, "Ethnicity" = "ethnicity")
 kable(olivia_pop)
