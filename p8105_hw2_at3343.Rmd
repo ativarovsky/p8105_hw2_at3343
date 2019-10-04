@@ -9,7 +9,8 @@ editor_options:
 # Problem 1
 
 ## Mr Trash Wheel Data
-We are reading in the Mr. Trash Wheel dataset, stored as an excel file. We will also remove the last column, which contains notes. 
+
+We are reading in the Mr. Trash Wheel dataset, stored as an excel file. We will remove the last column, which contains notes. 
 
 ```{r data_frame1}
 knitr::opts_chunk$set(echo = TRUE)
@@ -22,10 +23,11 @@ mr_trash_data = read_excel("../data/mr_trash_dataset.xlsx")
 mr_trash_data = janitor::clean_names(mr_trash_data)
 
 # Removing last column of comments
-mr_trash_data = select(mr_trash_data, -x15)
+mr_trash_data = select(mr_trash_data, -x15, -x16, -x17)
+mr_trash_data
 ```
 
-The "raw" dataframe contains 336 entries and 15 columns. 
+The "raw" dataframe contains 406 entries and 14 columns. 
 
 We will now remove any rows that have dumpster = NA and convert the column "sports_balls" to an integer vector rounded to the nearest whole number. 
 
@@ -36,53 +38,66 @@ mr_trash_data = drop_na(mr_trash_data, dumpster)
 
 # Rounding sports_balls to nearest integer
 mr_trash_data = mutate(mr_trash_data, sports_balls = round(as.integer(sports_balls, digits = 0)))
-
+mr_trash_data
 ```
 
 ## Precipitatin Data
 
-We will now import and clean 2017 and 2018 precipitation data from the Mr. Trash Wheel excel file.  
+We will now import and clean 2017,2018, and 2019 precipitation data from the Mr. Trash Wheel excel file.  
 
 ```{r data_frame3}
-# Importing 2017 and 2018 precipitation data
-precip_data_18 = read_excel("../data/mr_trash_dataset.xlsx",3)
-precip_data_17 = read_excel("../data/mr_trash_dataset.xlsx",4)
-precip_data_18 = janitor::clean_names(precip_data_18)
-precip_data_17 = janitor::clean_names(precip_data_17)
+# Importing 2017, 2018, and 2019 precipitation data. Skipping first row
+
+precip_data_19 = 
+  read_excel("../data/mr_trash_dataset.xlsx",4, skip = 1) %>% 
+  janitor::clean_names()
+
+precip_data_18 = 
+  read_excel("../data/mr_trash_dataset.xlsx",5, skip = 1) %>% 
+  janitor::clean_names()
+
+precip_data_17 = 
+  read_excel("../data/mr_trash_dataset.xlsx",6, skip = 1) %>% 
+  janitor::clean_names()
+
 ```
 
-We note that the 2017 dataset is complete, but the 2018 dataset is missing values for August - December. We also note that both datasets contain a row at the end with total precipitation for the year, which we don't need. We will omit these rows, along with the missing values in 2018, and add a year variable before combining the datasets. 
+
+We note that the 2017 and 2018 datasets are complete, but the 2019 dataset is missing values for July - December. We also note that all three datasets contain a row at the end with total precipitation for the year, which we don't need. We will omit these rows, along with the missing values in 2019, and add a year variable before combining the datasets. 
 
 ```{r data_frame4}
 # USE PIPE HERE AND ROUND TO TWO DECIMALS
 
-# Removing rows with "NA" for precipation 
-precip_data_17 = drop_na(precip_data_17, precipitation_in)
-precip_data_18 = drop_na(precip_data_18, precipitation_in)
-precip_data_18 = drop_na(precip_data_18, x2)
-
-# Removing top row 
-precip_data_17 = filter(precip_data_17, precipitation_in != "Month")
-precip_data_18 = filter(precip_data_18, precipitation_in != "Month")
+# Removing rows with "NA" for precipation or month (i.e. the totals row) 
+precip_data_19 = drop_na(precip_data_19)
+precip_data_17 = drop_na(precip_data_17)
+precip_data_18 = drop_na(precip_data_18)
 
 # Renaming precipitation columns with year
-precip_data_17 = rename(precip_data_17, precip_2017 = x2)
-precip_data_18 = rename(precip_data_18, precip_2018 = x2)
+precip_data_17 = rename(precip_data_17, precip_2017 = total)
+precip_data_18 = rename(precip_data_18, precip_2018 = total)
+precip_data_19 = rename(precip_data_19, precip_2019 = total)
+
+precip_data_17
+precip_data_18
+precip_data_19
+
 ```
 
-Next, we will combine the precipitation data for 2017 and 2018 using a left-join, since 2017 contains more data than 2018. 
+Next, we will combine the precipitation data for 2017 and 2018, and combine 2019 into the resulting dataset using a left-join since 2019 contains less data than 2017 and 2018. 
 
 ```{r data_frame5}
 
 precip_data =  
-  left_join(precip_data_17, precip_data_18, by = "precipitation_in")
+  left_join(precip_data_17, precip_data_18, by = "month") %>% 
+  left_join(precip_data_19, by = "month")
 
-# FIGURE OUT WHY PIPE DOESNT WORK HERE
+# Converting month to character variable
 precip_data =
-  mutate(precip_data, precipitation_in = as.numeric(precipitation_in),
-         precipitation_in = month.name[precipitation_in]) %>% 
-  rename(month = precipitation_in)
-    
+  mutate(precip_data, month = as.numeric(month),
+         month = month.name[month]) 
+
+precip_data
 ```
 
 
