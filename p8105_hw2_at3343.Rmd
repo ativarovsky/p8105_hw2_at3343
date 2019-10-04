@@ -43,7 +43,7 @@ mr_trash_data
 
 ## Precipitatin Data
 
-We will now import and clean 2017,2018, and 2019 precipitation data from the Mr. Trash Wheel excel file.  
+We will now import and clean 2017, 2018, and 2019 precipitation data from the Mr. Trash Wheel excel file.  
 
 ```{r data_frame3}
 # Importing 2017, 2018, and 2019 precipitation data. Skipping first row
@@ -100,7 +100,10 @@ precip_data =
 precip_data
 ```
 
+# Conclusion
 
+The Mr.Trash Wheel dataset catalogs the weight, volume and categories of trash processed by every Mr. Trash Wheel dumpster, organized by year and month. It contains `r count(mr_trash_data)` observations. The precipitation dataset catalogs precipitation in inches by month for 2017 - 2019. It contains `r count(precip_data)` observations. The total precipitation for 2018 was `r sum(pull(precip_data, precip_2018))` inches. The median number of sports balls in a dumpster in 2017 was 
+`r median(pull(mr_trash_data, sports_balls))`. 
 
 # Problem 2
 
